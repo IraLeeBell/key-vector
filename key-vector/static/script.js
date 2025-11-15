@@ -87,41 +87,84 @@ function displayBoxes(text) {
 // ----------------------------
 // GLOBAL KEYBOARD TYPING
 // ----------------------------
+
 document.addEventListener("keydown", (event) => {
   if (!currentWord) return;
 
   const boxes = document.querySelectorAll(".letter-box");
   const key = event.key.toUpperCase();
 
+  // Initialize separate indexes
+  let letterBoxIndex = 0;
+  for (let i = 0; i < currentInputIndex; i++) {
+    if (currentWord[i] !== " ") {
+      letterBoxIndex++;
+    }
+  }
+
+  // Handle Backspace
+  if (event.key === "Backspace") {
+    event.preventDefault();
+
+    if (currentInputIndex > 0) {
+      currentInputIndex--;
+
+      // Skip spaces going backward
+      while (currentInputIndex > 0 && currentWord[currentInputIndex] === " ") {
+        currentInputIndex--;
+      }
+
+      // Update letterBoxIndex to reflect new position
+      letterBoxIndex = 0;
+      for (let i = 0; i < currentInputIndex; i++) {
+        if (currentWord[i] !== " ") {
+          letterBoxIndex++;
+        }
+      }
+
+      const box = boxes[letterBoxIndex];
+      box.innerText = "_";
+      box.style.backgroundColor = "#1c1f26";
+    }
+
+    return;
+  }
+
+  // Only handle valid letters
   if (/^[A-Z ]$/.test(key) && currentInputIndex < currentWord.length) {
     const expectedChar = currentWord[currentInputIndex];
 
-    // Only skip input on spaces
-    if (expectedChar === " " && key !== " ") return;
+    // If spacebar pressed on a space, just move forward over spaces
+    if (event.key === " " && expectedChar === " ") {
+      event.preventDefault();
+      while (currentInputIndex < currentWord.length && currentWord[currentInputIndex] === " ") {
+        currentInputIndex++;
+      }
+      return;
+    }
 
-    const box = boxes[currentInputIndex];
+    // If we're at a space, skip it automatically before placing letter
+    while (currentInputIndex < currentWord.length && currentWord[currentInputIndex] === " ") {
+      currentInputIndex++;
+    }
+
+    if (currentInputIndex >= currentWord.length) return;
+
+    const box = boxes[letterBoxIndex];
     box.innerText = key;
 
-    if (key === expectedChar) {
+    if (key === currentWord[currentInputIndex]) {
       box.style.backgroundColor = "#224422"; // green
     } else {
       box.style.backgroundColor = "#442222"; // red
     }
 
     currentInputIndex++;
+
     checkCompletion();
   }
-
-  if (event.key === "Backspace") {
-    event.preventDefault();
-    if (currentInputIndex > 0) {
-      currentInputIndex--;
-      const box = boxes[currentInputIndex];
-      box.innerText = "_";
-      box.style.backgroundColor = "#1c1f26";
-    }
-  }
 });
+
 
 // ----------------------------
 // CHECK COMPLETION
