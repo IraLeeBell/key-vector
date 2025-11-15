@@ -40,3 +40,13 @@ body {
   overflow: hidden;
 }
 
+.letter-box.active-box {
+  box-shadow:
+    0 0 12px 4px rgba(0, 140, 255, 0.9),   /* bright core */
+    0 0 24px 8px rgba(0, 110, 255, 0.6),   /* bloom */
+    0 0 48px 16px rgba(0, 70, 255, 0.4);   /* wide amplifier glow */
+  transition: box-shadow 0.35s ease-in-out;
+  border-color: #3db4ff;
+}
+
+

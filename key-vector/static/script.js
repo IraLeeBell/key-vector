@@ -28,6 +28,8 @@ async function fetchAndDisplayWord() {
 
   displayBoxes(currentWord);
   currentInputIndex = 0;
+  updateActiveBoxHighlight();
+
 }
 
 
@@ -125,6 +127,8 @@ document.addEventListener("keydown", (event) => {
       const box = boxes[letterBoxIndex];
       box.innerText = "_";
       box.style.backgroundColor = "#1c1f26";
+      updateActiveBoxHighlight();
+
     }
 
     return;
@@ -162,6 +166,8 @@ document.addEventListener("keydown", (event) => {
     currentInputIndex++;
 
     checkCompletion();
+    updateActiveBoxHighlight();
+
   }
 });
 
@@ -171,47 +177,59 @@ document.addEventListener("keydown", (event) => {
 // ----------------------------
 
 function checkCompletion() {
-  if (hasCompleted) return; // prevent duplicate success handling
+  if (hasCompleted) return;
 
   const boxes = document.querySelectorAll(".letter-box");
-  let success = true;
+  let letterBoxIndex = 0;
 
+  // Check each character in currentWord
   for (let i = 0; i < currentWord.length; i++) {
-    if (currentWord[i] === " ") continue;
-    if (boxes[i].innerText !== currentWord[i]) {
-      success = false;
-      break;
+    const expected = currentWord[i];
+
+    if (expected === " ") {
+      // Skip over spaces in the phrase
+      continue;
     }
+
+    const typed = boxes[letterBoxIndex].innerText;
+
+    if (typed !== expected) {
+      return; // not complete yet
+    }
+
+    letterBoxIndex++;
   }
 
-  if (success) {
-    hasCompleted = true; // prevent future triggers
+  // If we reach here — ALL letters match
+  hasCompleted = true;
 
-    const status = document.createElement("div");
-    status.id = "success-msg";
-    status.innerText = "✅ Great job!";
-    status.style.marginTop = "1em";
-    status.style.fontSize = "1.5em";
-    status.style.color = "#00ff88";
+  const status = document.createElement("div");
+  status.id = "success-msg";
+  status.innerText = "✅ Great job!";
+  status.style.marginTop = "1em";
+  status.style.fontSize = "1.5em";
+  status.style.color = "#00ff88";
 
-    const nextBtn = document.createElement("button");
-    nextBtn.id = "next-challenge-btn";
-    nextBtn.innerText = "Next Challenge";
-    nextBtn.onclick = fetchAndDisplayWord;
-    nextBtn.style.marginLeft = "1em";
-    nextBtn.style.padding = "0.5em 1em";
-    nextBtn.style.fontSize = "1em";
+  const nextBtn = document.createElement("button");
+  nextBtn.id = "next-challenge-btn";
+  nextBtn.innerText = "Next Challenge";
+  nextBtn.onclick = fetchAndDisplayWord;
+  nextBtn.style.marginLeft = "1em";
+  nextBtn.style.padding = "0.5em 1em";
+  nextBtn.style.fontSize = "1em";
 
-    const app = document.getElementById("app");
-    const oldMsg = document.getElementById("success-msg");
-    if (oldMsg) oldMsg.remove();
-    const oldBtn = document.getElementById("next-challenge-btn");
-    if (oldBtn) oldBtn.remove();
+  const app = document.getElementById("app");
 
-    app.appendChild(status);
-    app.appendChild(nextBtn);
-  }
+  // Clean previous
+  const oldMsg = document.getElementById("success-msg");
+  if (oldMsg) oldMsg.remove();
+  const oldBtn = document.getElementById("next-challenge-btn");
+  if (oldBtn) oldBtn.remove();
+
+  app.appendChild(status);
+  app.appendChild(nextBtn);
 }
+
 
 
 // ----------------------------
@@ -267,3 +285,28 @@ document.getElementById("mode").addEventListener("change", () => {
     fetchAndDisplayWord();
   });
 });
+
+// ----------------------------
+// HIGHLIGHT ACTIVE BOX
+// ----------------------------
+
+function updateActiveBoxHighlight() {
+  const boxes = document.querySelectorAll(".letter-box");
+
+  // Remove glow from all
+  boxes.forEach(box => box.classList.remove("active-box"));
+
+  // Find the correct index for the next letter
+  let letterBoxIndex = 0;
+  for (let i = 0; i < currentInputIndex; i++) {
+    if (currentWord[i] !== " ") {
+      letterBoxIndex++;
+    }
+  }
+
+  // Apply glow to the next box (if not complete)
+  if (letterBoxIndex < boxes.length) {
+    boxes[letterBoxIndex].classList.add("active-box");
+  }
+}
+
