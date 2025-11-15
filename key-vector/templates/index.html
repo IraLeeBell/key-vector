@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Morse Practice</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div id="app">
+    <h1>Morse Practice</h1>
+    <select id="mode">
+      <option value="word">Word</option>
+      <option value="sentence">Sentence</option>
+      <option value="paragraph">Paragraph</option>
+    </select>
+    <button onclick="startPractice()">Play at 10 WPM</button>
+    <button onclick="stopPractice()">Stop</button>
+
+    <div id="boxes"></div>
+    <!-- <input type="text" id="userInput" oninput="checkInput()" placeholder="Type your answer here"/> -->
+
+    <div class="morse-chart">
+      <!-- Add the Morse alphabet here like in the screenshot -->
+    </div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
