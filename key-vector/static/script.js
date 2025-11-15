@@ -6,7 +6,9 @@ let currentInputIndex = 0;
 // ----------------------------
 // START PRACTICE
 // ----------------------------
-async function startPractice() {
+
+// Only fetch and show the word, no audio
+async function fetchAndDisplayWord() {
   stopPractice();
 
   const mode = document.getElementById("mode").value;
@@ -16,9 +18,15 @@ async function startPractice() {
 
   displayBoxes(currentWord);
   currentInputIndex = 0;
-
-  playMorse(currentWord);
 }
+
+// UPDATED: Only plays audio
+function startPractice() {
+  if (currentWord) {
+    playMorse(currentWord);
+  }
+}
+
 
 // ----------------------------
 // STOP AUDIO
@@ -133,10 +141,10 @@ function playMorse(text) {
 
 // Run once when the page is fully loaded
 window.addEventListener("DOMContentLoaded", () => {
-  startPractice();
-});
+  fetchAndDisplayWord();
 
-// Auto-update boxes when mode changes
+// Now the element exists — attach listener safely
 document.getElementById("mode").addEventListener("change", () => {
-  startPractice();
+    fetchAndDisplayWord();
+  });
 });
