@@ -2,6 +2,8 @@ let currentWord = "";
 let oscillators = [];
 let audioCtx = null;
 let currentInputIndex = 0;
+let hasCompleted = false;
+
 
 // ----------------------------
 // START PRACTICE
@@ -16,9 +18,19 @@ async function fetchAndDisplayWord() {
   const data = await res.json();
   currentWord = data.word;
 
+  hasCompleted = false;  // ✅ Reset the completion flag
+
+  // Clear old success message and button
+  const oldMsg = document.getElementById("success-msg");
+  if (oldMsg) oldMsg.remove();
+  const nextBtn = document.querySelector("#app button:last-of-type");
+  if (nextBtn && nextBtn.innerText === "Next Challenge") nextBtn.remove();
+
   displayBoxes(currentWord);
   currentInputIndex = 0;
 }
+
+
 
 // UPDATED: Only plays audio
 function startPractice() {
@@ -76,24 +88,88 @@ function displayBoxes(text) {
 // GLOBAL KEYBOARD TYPING
 // ----------------------------
 document.addEventListener("keydown", (event) => {
-  if (!currentWord) return; // Nothing to type yet
+  if (!currentWord) return;
 
   const boxes = document.querySelectorAll(".letter-box");
   const key = event.key.toUpperCase();
 
-  if (/^[A-Z ]$/.test(key) && currentInputIndex < boxes.length) {
-    boxes[currentInputIndex].innerText = key;
+  if (/^[A-Z ]$/.test(key) && currentInputIndex < currentWord.length) {
+    const expectedChar = currentWord[currentInputIndex];
+
+    // Only skip input on spaces
+    if (expectedChar === " " && key !== " ") return;
+
+    const box = boxes[currentInputIndex];
+    box.innerText = key;
+
+    if (key === expectedChar) {
+      box.style.backgroundColor = "#224422"; // green
+    } else {
+      box.style.backgroundColor = "#442222"; // red
+    }
+
     currentInputIndex++;
+    checkCompletion();
   }
 
   if (event.key === "Backspace") {
-    event.preventDefault(); // prevent browser navigation
+    event.preventDefault();
     if (currentInputIndex > 0) {
       currentInputIndex--;
-      boxes[currentInputIndex].innerText = "_";
+      const box = boxes[currentInputIndex];
+      box.innerText = "_";
+      box.style.backgroundColor = "#1c1f26";
     }
   }
 });
+
+// ----------------------------
+// CHECK COMPLETION
+// ----------------------------
+
+function checkCompletion() {
+  if (hasCompleted) return; // prevent duplicate success handling
+
+  const boxes = document.querySelectorAll(".letter-box");
+  let success = true;
+
+  for (let i = 0; i < currentWord.length; i++) {
+    if (currentWord[i] === " ") continue;
+    if (boxes[i].innerText !== currentWord[i]) {
+      success = false;
+      break;
+    }
+  }
+
+  if (success) {
+    hasCompleted = true; // prevent future triggers
+
+    const status = document.createElement("div");
+    status.id = "success-msg";
+    status.innerText = "✅ Great job!";
+    status.style.marginTop = "1em";
+    status.style.fontSize = "1.5em";
+    status.style.color = "#00ff88";
+
+    const nextBtn = document.createElement("button");
+    nextBtn.id = "next-challenge-btn";
+    nextBtn.innerText = "Next Challenge";
+    nextBtn.onclick = fetchAndDisplayWord;
+    nextBtn.style.marginLeft = "1em";
+    nextBtn.style.padding = "0.5em 1em";
+    nextBtn.style.fontSize = "1em";
+
+    const app = document.getElementById("app");
+    const oldMsg = document.getElementById("success-msg");
+    if (oldMsg) oldMsg.remove();
+    const oldBtn = document.getElementById("next-challenge-btn");
+    if (oldBtn) oldBtn.remove();
+
+    app.appendChild(status);
+    app.appendChild(nextBtn);
+  }
+}
+
 
 // ----------------------------
 // PLAY MORSE
