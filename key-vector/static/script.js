@@ -130,3 +130,13 @@ function playMorse(text) {
     t += unit * 2;
   }
 }
+
+// Run once when the page is fully loaded
+window.addEventListener("DOMContentLoaded", () => {
+  startPractice();
+});
+
+// Auto-update boxes when mode changes
+document.getElementById("mode").addEventListener("change", () => {
+  startPractice();
+});
