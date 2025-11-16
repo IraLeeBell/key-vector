@@ -57,8 +57,35 @@ body {
   margin-bottom: 1em;
 }
 
+/* ---------- HEADER LAYOUT ---------- */
+#menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.5em 1em;
+  background-color: #0d1117;
+  border-bottom: 1px solid #222;
+  margin-bottom: 1.5em;
+  gap: 1em;
+}
+
+/* ---------- BURGER MENU ---------- */
+#burger {
+  font-size: 1.8em;
+  cursor: pointer;
+  color: #3db4ff;
+  padding: 0 0.5em;
+  user-select: none;
+  transition: transform 0.3s ease-in-out;
+}
+
+#burger:hover {
+  transform: scale(1.1);
+}
+
+/* ---------- LOGO ---------- */
 #logo {
-  height: 48px;
+  height: 40px;
   width: auto;
   filter:
     drop-shadow(0 0 12px rgba(0, 140, 255, 0.9))
@@ -67,9 +94,20 @@ body {
   transition: transform 0.3s ease-in-out;
 }
 
-
 #logo:hover {
   transform: scale(1.05);
+}
+
+/* ---------- TITLE ---------- */
+#site-title {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #3db4ff;
+  text-shadow:
+    0 0 6px rgba(0, 140, 255, 0.8),
+    0 0 12px rgba(0, 110, 255, 0.5);
+  letter-spacing: 1px;
+  font-family: 'Courier New', monospace;
 }
 
 
