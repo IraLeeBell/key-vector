@@ -98,8 +98,8 @@ async function fetchAndDisplayWord() {
   // Clear old success message and button
   const oldMsg = document.getElementById("success-msg");
   if (oldMsg) oldMsg.remove();
-  const nextBtn = document.querySelector("#app button:last-of-type");
-  if (nextBtn && nextBtn.innerText === "Next Challenge") nextBtn.remove();
+  const nextBtn = document.getElementById("next-challenge-btn");
+  if (nextBtn) nextBtn.remove();
 
   displayBoxes(currentWord);
   currentInputIndex = 0;
