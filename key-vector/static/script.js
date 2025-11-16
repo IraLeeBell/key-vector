@@ -4,6 +4,81 @@ let audioCtx = null;
 let currentInputIndex = 0;
 let hasCompleted = false;
 
+const morseLetters = {
+  A: ".-", B: "-...", C: "-.-.", D: "-..", E: ".",
+  F: "..-.", G: "--.", H: "....", I: "..", J: ".---",
+  K: "-.-", L: ".-..", M: "--", N: "-.", O: "---",
+  P: ".--.", Q: "--.-", R: ".-.", S: "...", T: "-",
+  U: "..-", V: "...-", W: ".--", X: "-..-", Y: "-.--",
+  Z: "--.."
+};
+
+const alphabetOrder = Object.keys(morseLetters);  // A-Z
+const qwertyOrder = [
+  "Q","W","E","R","T","Y","U","I","O","P",
+  "A","S","D","F","G","H","J","K","L",
+  "Z","X","C","V","B","N","M"
+];
+
+const qwertyRows = [
+  ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+  ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+  ["Z", "X", "C", "V", "B", "N", "M"]
+];
+
+function renderMorseGrid(order = alphabetOrder) {
+  const grid = document.getElementById("morse-grid");
+  grid.innerHTML = "";
+
+  // Remove layout class from previous mode
+  grid.classList.remove("morse-grid");
+  grid.classList.remove("morse-rows");
+
+  if (Array.isArray(order[0])) {
+    // QWERTY layout (array of rows)
+    grid.classList.add("morse-rows");
+
+    order.forEach((row, rowIndex) => {
+      const rowDiv = document.createElement("div");
+      rowDiv.className = "morse-row";
+
+      // Responsive indent
+      if (rowIndex === 1) rowDiv.style.paddingLeft = "3em"; // ASDF row
+      if (rowIndex === 2) rowDiv.style.paddingLeft = "5em"; // ZXCV row
+
+      row.forEach(char => {
+        const div = document.createElement("div");
+        div.className = "morse-play";
+        div.setAttribute("data-char", char);
+        div.innerHTML = `
+          <span class="char">${char}</span>
+          <span class="code">${morseLetters[char]}</span>
+        `;
+        div.addEventListener("click", () => playMorse(char));
+        rowDiv.appendChild(div);
+      });
+
+      grid.appendChild(rowDiv);
+    });
+
+  } else {
+    // A–Z grid layout
+    grid.classList.add("morse-grid");
+
+    order.forEach(char => {
+      const div = document.createElement("div");
+      div.className = "morse-play";
+      div.setAttribute("data-char", char);
+      div.innerHTML = `
+        <span class="char">${char}</span>
+        <span class="code">${morseLetters[char]}</span>
+      `;
+      div.addEventListener("click", () => playMorse(char));
+      grid.appendChild(div);
+    });
+  }
+}
+
 
 // ----------------------------
 // START PRACTICE
@@ -310,3 +385,53 @@ function updateActiveBoxHighlight() {
   }
 }
 
+
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Start first challenge
+  fetchAndDisplayWord();
+
+  // 2. Mode change triggers new word
+  document.getElementById("mode").addEventListener("change", fetchAndDisplayWord);
+
+  // 3. Toggle Morse chart visibility
+  const toggleChart = document.getElementById("toggle-chart");
+  const chart = document.getElementById("morse-chart");
+
+  if (chart && toggleChart) {
+    chart.classList.add("collapsed");
+    toggleChart.innerText = "📡 Show Morse Code Chart";
+  }
+
+  if (toggleChart && chart) {
+    toggleChart.addEventListener("click", () => {
+      chart.classList.toggle("collapsed");
+      toggleChart.innerText = chart.classList.contains("collapsed")
+        ? "📡 Show Morse Code Chart"
+        : "📡 Hide Morse Code Chart";
+    });
+  }
+
+  // 4. Morse chart: click-to-play for each letter
+  document.querySelectorAll(".morse-play").forEach(el => {
+    el.addEventListener("click", () => {
+      const char = el.getAttribute("data-char");
+      if (char && morseMap[char]) {
+        playMorse(char);
+      }
+    });
+  });
+
+let usingQwerty = false;
+
+document.getElementById("layout-toggle").addEventListener("click", () => {
+  usingQwerty = !usingQwerty;
+  renderMorseGrid(usingQwerty ? qwertyRows : alphabetOrder);
+
+  const layoutBtn = document.getElementById("layout-toggle");
+  layoutBtn.innerText = usingQwerty ? "QWERTY" : "A–Z";
+});
+
+renderMorseGrid();
+
+
+});

@@ -17,9 +17,12 @@ def get_word(mode):
         word = "HELLO WORLD"
     elif mode == "paragraph":
         word = "HELLO WORLD. MORSE CODE IS FUN TO LEARN."
+    elif mode == "character":
+        word = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
     else:
         word = "ERROR"
     return jsonify({"word": word.upper()})
+
 
 if __name__ == "__main__":
     app.run(debug=True)

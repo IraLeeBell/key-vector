@@ -16,49 +16,26 @@
 
 
     <select id="mode">
+      <option value="character">Alphabet</option>
       <option value="word">Word</option>
       <option value="sentence">Sentence</option>
       <option value="paragraph">Paragraph</option>
     </select>
+
     <button onclick="startPractice()">Play at 10 WPM</button>
     <button onclick="stopPractice()">Stop</button>
 
     <div id="boxes"></div>
     <!-- <input type="text" id="userInput" oninput="checkInput()" placeholder="Type your answer here"/> -->
 
-    <div class="morse-chart">
-      <h2>Morse Code Chart</h2>
-      <table>
-        <tr><th>Letter</th><th>Morse Code</th></tr>
-        <tr><td>A</td><td>.-</td></tr>
-        <tr><td>B</td><td>-...</td></tr>
-        <tr><td>C</td><td>-.-.</td></tr>
-        <tr><td>D</td><td>-..</td></tr>
-        <tr><td>E</td><td>.</td></tr>
-        <tr><td>F</td><td>..-.</td></tr>
-        <tr><td>G</td><td>--.</td></tr>
-        <tr><td>H</td><td>....</td></tr>
-        <tr><td>I</td><td>..</td></tr>
-        <tr><td>J</td><td>.---</td></tr>
-        <tr><td>K</td><td>-.-</td></tr>
-        <tr><td>L</td><td>.-..</td></tr>
-        <tr><td>M</td><td>--</td></tr>
-        <tr><td>N</td><td>-.</td></tr>
-        <tr><td>O</td><td>---</td></tr>
-        <tr><td>P</td><td>.--.</td></tr>
-        <tr><td>Q</td><td>--.-</td></tr>
-        <tr><td>R</td><td>.-.</td></tr>
-        <tr><td>S</td><td>...</td></tr>
-        <tr><td>T</td><td>-</td></tr>
-        <tr><td>U</td><td>..-</td></tr>
-        <tr><td>V</td><td>...-</td></tr>
-        <tr><td>W</td><td>.--</td></tr>
-        <tr><td>X</td><td>-..-</td></tr>
-        <tr><td>Y</td><td>-.--</td></tr>
-        <tr><th>Z</th><th>--..</th></tr>
-      </table>
+    <div class="morse-chart-container">
+    <button id="toggle-chart">📡 Show Morse Code Chart</button>
+    <div id="morse-chart" class="collapsed">
+      <button id="layout-toggle" class="toggle-pill">A–Z</button>
+      <div class="morse-grid" id="morse-grid"></div>
     </div>
-  </div>
+</div>
+</div>
 
   <script src="/static/script.js"></script>
 </body>

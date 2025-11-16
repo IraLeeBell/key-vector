@@ -110,5 +110,177 @@ body {
   font-family: 'Courier New', monospace;
 }
 
+/* Morse chart container */
+.morse-chart-container {
+  margin-top: 2em;
+  padding: 1em;
+  border-top: 1px solid #222;
+}
+
+/* Toggle button */
+#toggle-chart {
+  background: transparent;
+  border: 2px solid #3db4ff;
+  color: #3db4ff;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#toggle-chart:hover {
+  background-color: rgba(0, 110, 255, 0.1);
+  box-shadow: 0 0 12px rgba(0, 140, 255, 0.9),
+              0 0 24px rgba(0, 110, 255, 0.6),
+              0 0 48px rgba(0, 70, 255, 0.4);
+}
+
+#toggle-chart:focus {
+  outline: none;
+  box-shadow: 0 0 12px rgba(0, 140, 255, 1);
+}
+
+/* Collapsible chart */
+#morse-chart {
+  margin-top: 1.5em;
+  max-height: 800px;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+  opacity: 1;
+}
+
+#morse-chart.collapsed {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Grid layout */
+
+.morse-play {
+  background-color: #1c1f26;
+  padding: 0.75em 1em;
+  border: 1px solid #333;
+  border-radius: 6px;
+  text-align: center;
+  box-shadow:
+    0 0 6px rgba(0, 140, 255, 0.2),
+    0 0 12px rgba(0, 110, 255, 0.15);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.morse-play:hover {
+  box-shadow:
+    0 0 12px rgba(0, 140, 255, 0.7),
+    0 0 24px rgba(0, 110, 255, 0.5),
+    0 0 48px rgba(0, 70, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.morse-grid div:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 8px rgba(0, 140, 255, 0.4),
+    0 0 16px rgba(0, 110, 255, 0.3),
+    0 0 24px rgba(0, 70, 255, 0.2);
+}
+
+.char {
+  font-size: 1.25em;
+  color: #3db4ff;
+  font-family: 'Courier New', monospace;
+}
+
+.code {
+  display: block;
+  margin-top: 0.25em;
+  font-family: monospace;
+  color: #ccc;
+  font-size: 1em;
+}
 
 
+.morse-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25em 0.5em;
+  border-bottom: 1px solid #222;
+}
+
+.toggle-pill {
+  font-size: 0.9em;
+  font-family: 'Courier New', monospace;
+  background: transparent;
+  border: 2px solid #3db4ff;
+  border-radius: 999px;
+  color: #3db4ff;
+  padding: 0.4em 1em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow:
+    0 0 6px rgba(0, 140, 255, 0.5),
+    0 0 12px rgba(0, 110, 255, 0.3);
+}
+
+.toggle-pill:hover {
+  background-color: rgba(0, 110, 255, 0.1);
+  box-shadow:
+    0 0 12px rgba(0, 140, 255, 0.9),
+    0 0 24px rgba(0, 110, 255, 0.6),
+    0 0 48px rgba(0, 70, 255, 0.4);
+}
+
+.toggle-pill:focus {
+  outline: none;
+  border-color: #00bfff;
+}
+
+
+.morse-row .morse-play {
+  flex: 0 0 auto;
+  min-width: 60px;
+  max-width: 70px;
+}
+
+/* Grid layout for A–Z */
+.morse-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 1em;
+  margin: 1em auto 0 auto;
+  justify-items: center;
+  text-align: left;
+  max-width: 800px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+/* Row layout for QWERTY */
+.morse-rows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1em;
+  gap: 0.5em;
+}
+
+/* Each QWERTY row */
+.morse-row {
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+  box-sizing: border-box;
+}
+
+.morse-row .morse-play {
+  flex: 0 0 auto;
+  min-width: 60px;
+  box-sizing: border-box;
+}
